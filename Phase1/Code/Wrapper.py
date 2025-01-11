@@ -50,6 +50,12 @@ def createGaussianKernel(x, y, scale, order=1):
         raise ValueError('Gaussian order must be first or second order. Instead is: {order}')
     return kernel_dx
 
+def solveGabor(x, y, wavelength, theta, phase_offset, sigma, aspect_ratio):
+    x_prime = x*np.cos(theta) + y*np.sin(theta)
+    y_prime = -x*np.sin(theta) + y*np.cos(theta)
+    gabor = np.e**(-(x_prime**2+aspect_ratio**2*y_prime**2)/(2*sigma**2))*np.sin(2*np.pi*(x_prime/wavelength)+phase_offset)
+    return gabor
+
 def rotateAboutCenter(matrix: np.ndarray, theta):
     #TODO: Improve this rotation function to remove the scipy include and properly rotate the matix.
     # size, _ = matrix.shape
@@ -122,7 +128,8 @@ def main():
 	Display all the filters in this filter bank and save image as LM.png,
 	use command "cv2.imwrite(...)"
 	"""
-
+	# Second order and laplacian are done.
+    # TODO: We need to create a dedicated function and add elongation factor
 
 	"""
 	Generate Gabor Filter Bank: (Gabor)
@@ -205,7 +212,6 @@ def main():
 	Display PbLite and save image as PbLite_ImageName.png
 	use command "cv2.imwrite(...)"
 	"""
-	pass
     
 if __name__ == '__main__':
     main()
